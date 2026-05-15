@@ -1,65 +1,203 @@
-import Image from "next/image";
+import Link from "next/link";
+import {
+  MessageSquare,
+  School,
+  FileText,
+  ListChecks,
+  Calendar,
+  BarChart3,
+} from "lucide-react";
+
+const features = [
+  {
+    icon: School,
+    title: "School List Builder",
+    description:
+      "Balance reach, target, and safety schools. See acceptance rates and keep notes on every pick.",
+    color: "bg-blue-100 text-blue-600",
+  },
+  {
+    icon: MessageSquare,
+    title: "AI Counselor",
+    description:
+      "Ask detailed questions anytime. Get named programs, deadlines, and strategy — grounded in your profile.",
+    color: "bg-orange-100 text-orange-600",
+  },
+  {
+    icon: FileText,
+    title: "Essay Review",
+    description:
+      "Structured feedback on drafts so every supplement stays sharp, authentic, and on-prompt.",
+    color: "bg-violet-100 text-violet-600",
+  },
+  {
+    icon: ListChecks,
+    title: "EC Strategy",
+    description:
+      "Shape extracurriculars into a coherent story. Competitions, research, leadership — organized.",
+    color: "bg-emerald-100 text-emerald-600",
+  },
+  {
+    icon: Calendar,
+    title: "Timeline Tracker",
+    description:
+      "Deadlines, tests, and milestones in one view. Never miss another date across any school.",
+    color: "bg-rose-100 text-rose-600",
+  },
+  {
+    icon: BarChart3,
+    title: "Admit Odds",
+    description:
+      "Grounded estimates from your stats — transparent, not magical thinking.",
+    color: "bg-amber-100 text-amber-600",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="flex min-h-full flex-col" style={{ background: "var(--bg-base)" }}>
+      {/* Nav */}
+      <header className="sticky top-0 z-50 border-b border-stone-200/80 dark:border-stone-700/60 backdrop-blur-md" style={{ background: "color-mix(in srgb, var(--bg-base) 90%, transparent)" }}>
+        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
+          <Link href="/" className="font-heading text-lg font-bold tracking-tight text-stone-900 dark:text-stone-100">
+            admit
+          </Link>
+          <nav className="flex items-center gap-2 text-sm">
+            <Link
+              href="/login"
+              className="rounded-lg px-3 py-2 text-stone-600 dark:text-stone-400 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Log in
+            </Link>
+            <Link
+              href="/signup"
+              className="rounded-lg bg-orange-600 px-3.5 py-2 font-medium text-white shadow-sm transition-colors hover:bg-orange-700"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              Get started
+            </Link>
+          </nav>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </header>
+
+      <main className="flex-1">
+        {/* Hero */}
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-amber-50/40 dark:from-orange-950/30 dark:via-amber-950/10 to-transparent" />
+          <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-orange-100/60 dark:bg-orange-900/20 blur-3xl" />
+          <div className="absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-amber-100/50 dark:bg-amber-900/15 blur-3xl" />
+
+          <div className="relative mx-auto max-w-5xl px-6 pb-24 pt-20 sm:pt-32">
+            <div className="inline-flex items-center gap-2 rounded-full border border-orange-200/80 dark:border-orange-800/60 bg-orange-50 dark:bg-orange-950/50 px-3.5 py-1.5 text-xs font-medium text-orange-700 dark:text-orange-400 shadow-sm mb-6">
+              <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
+              Free to start · No credit card needed
+            </div>
+
+            <h1 className="font-heading max-w-3xl text-5xl font-semibold leading-[1.08] tracking-tight text-stone-900 dark:text-stone-100 sm:text-6xl">
+              Your college journey,{" "}
+              <span className="text-orange-600 dark:text-orange-400">finally organized.</span>
+            </h1>
+
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-600 dark:text-stone-400">
+              One calm workspace for essays, school lists, deadlines, and AI
+              strategy — without the spreadsheet chaos.
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center rounded-xl bg-orange-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-orange-700 hover:shadow-lg"
+              >
+                Start for free
+              </Link>
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center rounded-xl border border-stone-300 dark:border-stone-600 px-6 py-3 text-sm font-medium text-stone-800 dark:text-stone-200 shadow-sm transition-colors hover:bg-stone-50 dark:hover:bg-stone-800"
+                style={{ background: "var(--bg-card)" }}
+              >
+                I have an account
+              </Link>
+            </div>
+
+            <p className="mt-6 text-xs text-stone-400 dark:text-stone-500">
+              Trusted by students applying to Harvard, MIT, Stanford, and more.
+            </p>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section className="border-t border-stone-200/60 dark:border-stone-700/50 py-24">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400">
+              Everything you need
+            </div>
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-stone-900 dark:text-stone-100 sm:text-4xl">
+              One workspace. Every piece.
+            </h2>
+            <p className="mt-3 max-w-xl text-stone-500 dark:text-stone-400">
+              Built for students who want clarity, not another dashboard that adds noise.
+            </p>
+
+            <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {features.map((feature) => {
+                const Icon = feature.icon;
+                return (
+                  <li
+                    key={feature.title}
+                    className="group rounded-2xl border border-stone-200/80 dark:border-stone-700/60 p-6 shadow-[0_1px_3px_rgba(28,25,23,0.06)] dark:shadow-none transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(28,25,23,0.10)] dark:hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+                    style={{ background: "var(--bg-card)" }}
+                  >
+                    <div className={`mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl ${feature.color}`}>
+                      <Icon size={18} strokeWidth={1.8} />
+                    </div>
+                    <h3 className="font-heading text-base font-semibold text-stone-900 dark:text-stone-100">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-stone-500 dark:text-stone-400">
+                      {feature.description}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-24">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="relative overflow-hidden rounded-3xl bg-stone-900 dark:bg-stone-950 px-8 py-16 text-center sm:px-16">
+              <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-orange-600/20 blur-3xl" />
+              <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
+              <div className="relative">
+                <h2 className="font-heading text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  Ready when you are.
+                </h2>
+                <p className="mx-auto mt-4 max-w-md text-stone-400">
+                  Start with your school list, bring in your profile, and let the AI counselor fill in the gaps.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <Link
+                    href="/signup"
+                    className="inline-flex items-center justify-center rounded-xl bg-orange-600 px-7 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-orange-500 hover:shadow-lg"
+                  >
+                    Start with Admit
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center justify-center rounded-xl border border-stone-700 bg-stone-800 px-7 py-3 text-sm font-medium text-stone-200 transition-colors hover:bg-stone-700"
+                  >
+                    Log in
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
+
+      <footer className="border-t border-stone-200/60 dark:border-stone-700/50 py-8 text-center text-xs text-stone-400 dark:text-stone-500">
+        © {new Date().getFullYear()} Admit
+      </footer>
     </div>
   );
 }

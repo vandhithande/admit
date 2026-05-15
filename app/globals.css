@@ -1,26 +1,39 @@
 @import "tailwindcss";
 
+/* Class-based dark mode for Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+/* Light theme */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-base: #FAF9F6;
+  --bg-card: #ffffff;
+  --bg-sidebar: #1c1917;
+  --bg-sidebar-hover: rgba(255,255,255,0.07);
+  --brand: #d97757;
+}
+
+/* Dark theme */
+.dark {
+  --bg-base: #181614;
+  --bg-card: #231f1d;
+  --bg-sidebar: #100e0c;
+  --bg-sidebar-hover: rgba(255,255,255,0.06);
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-background: var(--bg-base);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--bg-base);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.font-heading {
+  font-family: var(--font-newsreader), ui-serif, Georgia, "Times New Roman",
+    serif;
 }
