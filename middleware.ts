@@ -37,6 +37,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
+  // Allow subscribe/success through without subscription check
+  if (pathname === "/subscribe/success") return supabaseResponse;
+
   // Gate dashboard behind active subscription
   if (user && pathname.startsWith("/dashboard")) {
     const { data: profile } = await supabase
