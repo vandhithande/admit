@@ -124,6 +124,79 @@ export default function Home() {
           </div>
         </section>
 
+        {/* School logos marquee */}
+        <section className="border-t border-stone-200/60 dark:border-stone-700/50 py-10 overflow-hidden">
+          <p className="text-center text-xs font-semibold uppercase tracking-widest text-stone-400 dark:text-stone-500 mb-8">
+            Students applying to
+          </p>
+          <div className="relative">
+            {/* Fade edges */}
+            <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-[var(--bg-base)] to-transparent" />
+            <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-[var(--bg-base)] to-transparent" />
+            <div className="flex animate-marquee gap-6 whitespace-nowrap">
+              {[
+                { name: "MIT", domain: "mit.edu" },
+                { name: "Harvard", domain: "harvard.edu" },
+                { name: "Stanford", domain: "stanford.edu" },
+                { name: "Yale", domain: "yale.edu" },
+                { name: "Princeton", domain: "princeton.edu" },
+                { name: "Columbia", domain: "columbia.edu" },
+                { name: "UPenn", domain: "upenn.edu" },
+                { name: "Brown", domain: "brown.edu" },
+                { name: "Dartmouth", domain: "dartmouth.edu" },
+                { name: "Cornell", domain: "cornell.edu" },
+                { name: "Duke", domain: "duke.edu" },
+                { name: "Northwestern", domain: "northwestern.edu" },
+                { name: "Johns Hopkins", domain: "jhu.edu" },
+                { name: "Caltech", domain: "caltech.edu" },
+                { name: "Chicago", domain: "uchicago.edu" },
+                { name: "Georgetown", domain: "georgetown.edu" },
+                { name: "Vanderbilt", domain: "vanderbilt.edu" },
+                { name: "Rice", domain: "rice.edu" },
+                { name: "Notre Dame", domain: "nd.edu" },
+                { name: "Emory", domain: "emory.edu" },
+                // duplicate for seamless loop
+                { name: "MIT", domain: "mit.edu" },
+                { name: "Harvard", domain: "harvard.edu" },
+                { name: "Stanford", domain: "stanford.edu" },
+                { name: "Yale", domain: "yale.edu" },
+                { name: "Princeton", domain: "princeton.edu" },
+                { name: "Columbia", domain: "columbia.edu" },
+                { name: "UPenn", domain: "upenn.edu" },
+                { name: "Brown", domain: "brown.edu" },
+                { name: "Dartmouth", domain: "dartmouth.edu" },
+                { name: "Cornell", domain: "cornell.edu" },
+                { name: "Duke", domain: "duke.edu" },
+                { name: "Northwestern", domain: "northwestern.edu" },
+                { name: "Johns Hopkins", domain: "jhu.edu" },
+                { name: "Caltech", domain: "caltech.edu" },
+                { name: "Chicago", domain: "uchicago.edu" },
+                { name: "Georgetown", domain: "georgetown.edu" },
+                { name: "Vanderbilt", domain: "vanderbilt.edu" },
+                { name: "Rice", domain: "rice.edu" },
+                { name: "Notre Dame", domain: "nd.edu" },
+                { name: "Emory", domain: "emory.edu" },
+              ].map((school, i) => (
+                <div
+                  key={`${school.domain}-${i}`}
+                  className="flex shrink-0 items-center gap-2.5 rounded-2xl border border-stone-200/80 dark:border-stone-700/60 px-4 py-3 shadow-[0_1px_3px_rgba(28,25,23,0.05)]"
+                  style={{ background: "var(--bg-card)" }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`https://www.google.com/s2/favicons?domain=${school.domain}&sz=32`}
+                    alt={school.name}
+                    width={20}
+                    height={20}
+                    className="rounded-sm"
+                  />
+                  <span className="text-sm font-medium text-stone-700 dark:text-stone-300">{school.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Features */}
         <section className="border-t border-stone-200/60 dark:border-stone-700/50 py-24">
           <div className="mx-auto max-w-5xl px-6">

@@ -43,7 +43,6 @@ const features = [
     title: "Essays",
     description: "Draft and refine your Common App and supplemental essays.",
     color: "bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-400",
-    comingSoon: true,
   },
   {
     href: "/dashboard/timeline",

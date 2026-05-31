@@ -3,7 +3,15 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { stripe, PRICE_ID, FOUNDING_MEMBER_LIMIT, FOUNDING_TRIAL_DAYS, STANDARD_TRIAL_DAYS } from "@/lib/stripe";
 
-export async function POST() {
+const VALID_PRICES = new Set([
+  PRICE_ID,
+  process.env.STRIPE_BASIC_MONTHLY,
+  process.env.STRIPE_BASIC_YEARLY,
+  process.env.STRIPE_PRO_MONTHLY,
+  process.env.STRIPE_PRO_YEARLY,
+]);
+
+export async function POST(request: Request) {
   const cookieStore = await cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,6 +26,15 @@ export async function POST() {
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Get selected price from body (default to basic monthly)
+  let priceId = PRICE_ID;
+  try {
+    const body = await request.json();
+    if (body.priceId && VALID_PRICES.has(body.priceId)) {
+      priceId = body.priceId;
+    }
+  } catch { /* no body */ }
 
   // Get or create Stripe customer
   const { data: profile } = await supabase
@@ -46,7 +63,7 @@ export async function POST() {
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     mode: "subscription",
-    line_items: [{ price: PRICE_ID, quantity: 1 }],
+    line_items: [{ price: priceId, quantity: 1 }],
     subscription_data: { trial_period_days: trialDays },
     payment_method_collection: "always",
     success_url: `${origin}/subscribe/success`,
