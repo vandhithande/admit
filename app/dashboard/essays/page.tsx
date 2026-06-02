@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ProGate } from "@/components/pro-gate";
 import { FileText, Loader2, ChevronDown, ChevronUp, AlertCircle, CheckCircle2, Lightbulb, MessageSquare } from "lucide-react";
 
 const ESSAY_TYPES = [
@@ -99,6 +100,7 @@ export default function EssaysPage() {
   }
 
   return (
+    <ProGate feature="Essay Review">
     <div className="flex-1" style={{ background: "var(--bg-base)" }}>
       <header className="relative overflow-hidden border-b border-stone-200/60 dark:border-stone-700/50 px-8 py-8" style={{ background: "var(--bg-card)" }}>
         <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-violet-100/40 dark:bg-violet-900/10 blur-2xl" />
@@ -232,5 +234,6 @@ export default function EssaysPage() {
         </div>
       </div>
     </div>
+    </ProGate>
   );
 }

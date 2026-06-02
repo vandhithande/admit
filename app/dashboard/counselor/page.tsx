@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ProGate } from "@/components/pro-gate";
 
 type Message = { role: "user" | "assistant"; content: string };
 type Session = { id: string; title: string; updated_at: string };
@@ -222,6 +223,7 @@ export default function CounselorPage() {
   }
 
   return (
+    <ProGate feature="AI Counselor">
     <div className="flex h-full" style={{ background: "var(--bg-base)" }}>
       {/* Conversation list */}
       <div className="flex w-52 shrink-0 flex-col border-r border-stone-200/60 dark:border-stone-700/50" style={{ background: "var(--bg-card)" }}>
@@ -374,5 +376,6 @@ export default function CounselorPage() {
         </div>
       </div>
     </div>
+    </ProGate>
   );
 }

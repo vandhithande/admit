@@ -22,6 +22,7 @@ const features = [
     title: "My Schools",
     description: "Build and organize your college list by reach, target, and safety.",
     color: "bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400",
+    free: true,
   },
   {
     href: "/dashboard/counselor",
@@ -33,14 +34,14 @@ const features = [
   {
     href: "/dashboard/activities",
     icon: ListChecks,
-    title: "Activities",
+    title: "EC Strategy",
     description: "Track your extracurriculars and build a compelling storyline.",
     color: "bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400",
   },
   {
     href: "/dashboard/essays",
     icon: FileText,
-    title: "Essays",
+    title: "Essay Review",
     description: "Draft and refine your Common App and supplemental essays.",
     color: "bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-400",
   },
@@ -50,6 +51,7 @@ const features = [
     title: "Timeline",
     description: "Stay on top of deadlines and milestones for every school.",
     color: "bg-rose-100 text-rose-600 dark:bg-rose-950 dark:text-rose-400",
+    free: true,
     comingSoon: true,
   },
   {
@@ -166,16 +168,28 @@ export default function DashboardPage() {
                     <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${f.color}`}>
                       <Icon size={17} strokeWidth={1.8} />
                     </div>
-                    {f.comingSoon ? (
-                      <span className="rounded-full bg-stone-100 dark:bg-stone-800 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-stone-400 dark:text-stone-500">
-                        Soon
-                      </span>
-                    ) : (
-                      <ChevronRight
-                        size={15}
-                        className="mt-0.5 text-stone-300 dark:text-stone-600 transition-transform group-hover:translate-x-0.5 group-hover:text-stone-500 dark:group-hover:text-stone-400"
-                      />
-                    )}
+                    <div className="flex items-center gap-1.5">
+                      {f.free && !f.comingSoon && (
+                        <span className="rounded-full bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+                          Free
+                        </span>
+                      )}
+                      {!f.free && !f.comingSoon && (
+                        <span className="rounded-full bg-orange-100 dark:bg-orange-950/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-orange-700 dark:text-orange-400">
+                          Pro
+                        </span>
+                      )}
+                      {f.comingSoon ? (
+                        <span className="rounded-full bg-stone-100 dark:bg-stone-800 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-stone-400 dark:text-stone-500">
+                          Soon
+                        </span>
+                      ) : (
+                        <ChevronRight
+                          size={15}
+                          className="mt-0.5 text-stone-300 dark:text-stone-600 transition-transform group-hover:translate-x-0.5 group-hover:text-stone-500 dark:group-hover:text-stone-400"
+                        />
+                      )}
+                    </div>
                   </div>
                   <h3 className="mt-3 text-sm font-semibold text-stone-900 dark:text-stone-100">{f.title}</h3>
                   <p className="mt-1 text-xs leading-relaxed text-stone-500 dark:text-stone-400">{f.description}</p>

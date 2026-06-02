@@ -89,7 +89,7 @@ export default function Home() {
           <div className="relative mx-auto max-w-5xl px-6 pb-24 pt-20 sm:pt-32">
             <div className="inline-flex items-center gap-2 rounded-full border border-orange-200/80 dark:border-orange-800/60 bg-orange-50 dark:bg-orange-950/50 px-3.5 py-1.5 text-xs font-medium text-orange-700 dark:text-orange-400 shadow-sm mb-6">
               <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
-              Free to start · No credit card needed
+              Free forever · Upgrade for AI features
             </div>
 
             <h1 className="font-heading max-w-3xl text-5xl font-semibold leading-[1.08] tracking-tight text-stone-900 dark:text-stone-100 sm:text-6xl">
