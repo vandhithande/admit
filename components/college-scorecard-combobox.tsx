@@ -265,7 +265,8 @@ export function CollegeScorecardCombobox({
         onKeyDown={onKeyDown}
         placeholder="Start typing a college name…"
         autoComplete="off"
-        className="mt-1 w-full rounded-lg border border-neutral-200 bg-neutral-50/50 px-3 py-2 text-sm text-neutral-900 outline-none ring-neutral-900/10 transition placeholder:text-neutral-400 focus:border-neutral-300 focus:bg-white focus:ring-2 focus:ring-neutral-900/10"
+        className="mt-1 w-full rounded-xl border border-stone-200 dark:border-stone-700 px-3.5 py-2.5 text-sm text-stone-900 dark:text-stone-100 outline-none transition placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:border-orange-400 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-400/20"
+        style={{ background: "var(--bg-base)" }}
       />
       {loading ? (
         <p className="mt-1.5 text-xs text-neutral-500">Searching…</p>
