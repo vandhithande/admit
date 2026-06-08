@@ -1,7 +1,6 @@
 "use client";
 
-import { createClient } from "@/lib/supabase";
-import { useEffect, useMemo, useState } from "react";
+import { useUser } from "@/components/user-context";
 import Link from "next/link";
 import { Zap } from "lucide-react";
 
@@ -11,31 +10,9 @@ interface ProGateProps {
 }
 
 export function ProGate({ children, feature }: ProGateProps) {
-  const supabase = useMemo(() => createClient(), []);
-  const [status, setStatus] = useState<"loading" | "free" | "pro">("loading");
+  const { isPro, loading } = useUser();
 
-  useEffect(() => {
-    async function check() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setStatus("free"); return; }
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("subscription_status, trial_ends_at")
-        .eq("user_id", user.id)
-        .single();
-
-      const s = profile?.subscription_status;
-      const now = new Date();
-      const isTrialing = s === "trialing" && profile?.trial_ends_at && new Date(profile.trial_ends_at) > now;
-      const isActive = s === "active";
-
-      setStatus(isTrialing || isActive ? "pro" : "free");
-    }
-    void check();
-  }, [supabase]);
-
-  if (status === "loading") {
+  if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center py-24">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-stone-200 border-t-orange-500" />
@@ -43,7 +20,7 @@ export function ProGate({ children, feature }: ProGateProps) {
     );
   }
 
-  if (status === "pro") return <>{children}</>;
+  if (isPro) return <>{children}</>;
 
   return (
     <div className="flex flex-1 items-center justify-center px-6 py-24" style={{ background: "var(--bg-base)" }}>
@@ -55,9 +32,7 @@ export function ProGate({ children, feature }: ProGateProps) {
           Pro feature
         </h2>
         <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
-          {feature
-            ? `${feature} is part of Admit Pro.`
-            : "This feature is part of Admit Pro."}{" "}
+          {feature ? `${feature} is part of Admit Pro.` : "This feature is part of Admit Pro."}{" "}
           Upgrade for $9/month and get AI counseling, essay review, EC strategy, and admissions predictor.
         </p>
         <Link

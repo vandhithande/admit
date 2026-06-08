@@ -140,7 +140,7 @@ export default function EssaysPage() {
             <div className="mt-4">
               <div className="flex items-center justify-between mb-1.5">
                 <label className={labelCls.replace("mb-1.5", "")}>Your essay</label>
-                <span className={`text-xs font-medium ${liveWordCount > 650 ? "text-red-500" : liveWordCount > 550 ? "text-amber-500" : "text-stone-400"}`}>
+                <span className={`text-xs font-medium ${liveWordCount > 650 ? "text-red-500" : liveWordCount > 620 ? "text-amber-500" : "text-stone-400"}`}>
                   {liveWordCount} words
                 </span>
               </div>

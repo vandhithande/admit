@@ -4,7 +4,6 @@ import {
   CollegeScorecardCombobox,
   type PickedSchool,
 } from "@/components/college-scorecard-combobox";
-import { getAcceptanceRateByName } from "@/lib/colleges";
 import { createClient } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -159,6 +158,7 @@ export function MySchoolsSection({ useScorecardSearch = false }: Props) {
         category: newCategory,
         location,
         notes: "",
+        ...(picked?.acceptanceRate != null ? { acceptance_rate: picked.acceptanceRate } : {}),
       })
       .select()
       .single();
@@ -292,7 +292,7 @@ export function MySchoolsSection({ useScorecardSearch = false }: Props) {
               ) : (
                 <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {list.map((school) => {
-                    const rate = getAcceptanceRateByName(school.name);
+                    const rate: number | null = (school as SchoolRow & { acceptance_rate?: number }).acceptance_rate ?? null;
                     return (
                       <li
                         key={school.id}

@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useUser } from "@/components/user-context";
 import {
   School,
   MessageSquare,
@@ -64,38 +65,49 @@ const features = [
   },
 ];
 
+function Skeleton({ className }: { className: string }) {
+  return <div className={`animate-pulse rounded-xl bg-stone-200 dark:bg-stone-700/60 ${className}`} />;
+}
+
 export default function DashboardPage() {
   const supabase = useMemo(() => createClient(), []);
+  const { user, profile: userProfile } = useUser();
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [counts, setCounts] = useState<SchoolCounts | null>(null);
+  const [loadingCounts, setLoadingCounts] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+    const name = userProfile?.name?.trim();
+    setDisplayName(name || user.email?.split("@")[0] || null);
+  }, [user, userProfile]);
 
   useEffect(() => {
     async function load() {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const [{ data: profile }, { data: schools }] = await Promise.all([
-        supabase.from("profiles").select("name").eq("user_id", user.id).single(),
-        supabase.from("schools").select("category").eq("user_id", user.id),
-      ]);
-
-      const name = profile?.name?.trim();
-      setDisplayName(name || user.email?.split("@")[0] || null);
+      const { data: schools, error } = await supabase
+        .from("schools")
+        .select("category")
+        .eq("user_id", user.id);
 
       const data = schools;
 
-      if (data) {
+      if (schools) {
         const c = { reach: 0, target: 0, safety: 0 };
-        for (const row of data) {
+        for (const row of schools) {
           if (row.category === "reach") c.reach++;
           else if (row.category === "target") c.target++;
           else if (row.category === "safety") c.safety++;
         }
         setCounts(c);
+      } else if (error) {
+        setCounts({ reach: 0, target: 0, safety: 0 });
       }
+      setLoadingCounts(false);
     }
     void load();
-  }, [supabase]);
+  }, [supabase, user]);
 
   const totalSchools = counts ? counts.reach + counts.target + counts.safety : null;
 
@@ -122,30 +134,30 @@ export default function DashboardPage() {
 
       <div className="px-8 py-8 space-y-8">
         {/* School stats */}
-        {counts !== null && totalSchools !== null && (
-          <div className="grid grid-cols-4 gap-4">
-            {[
-              { label: "Total", value: totalSchools, color: "text-stone-900 dark:text-stone-100", tag: "schools" },
+        <div className="grid grid-cols-4 gap-4">
+          {loadingCounts ? (
+            [0,1,2,3].map((i) => (
+              <div key={i} className="rounded-2xl border border-stone-200/80 dark:border-stone-700/60 p-5" style={{ background: "var(--bg-card)" }}>
+                <Skeleton className="h-3 w-14" />
+                <Skeleton className="mt-3 h-8 w-10" />
+                <Skeleton className="mt-1.5 h-2.5 w-12" />
+              </div>
+            ))
+          ) : counts !== null ? (
+            [
+              { label: "Total", value: counts.reach + counts.target + counts.safety, color: "text-stone-900 dark:text-stone-100", tag: "schools" },
               { label: "Reaches", value: counts.reach, color: "text-rose-600 dark:text-rose-400", tag: "schools" },
               { label: "Targets", value: counts.target, color: "text-amber-600 dark:text-amber-400", tag: "schools" },
               { label: "Safeties", value: counts.safety, color: "text-emerald-600 dark:text-emerald-400", tag: "schools" },
             ].map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-2xl border border-stone-200/80 dark:border-stone-700/60 p-5 shadow-[0_1px_3px_rgba(28,25,23,0.06)] dark:shadow-none"
-                style={{ background: "var(--bg-card)" }}
-              >
-                <p className={`text-xs font-semibold uppercase tracking-wide ${stat.color}`}>
-                  {stat.label}
-                </p>
-                <p className="mt-2 text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-100">
-                  {stat.value}
-                </p>
+              <div key={stat.label} className="rounded-2xl border border-stone-200/80 dark:border-stone-700/60 p-5 shadow-[0_1px_3px_rgba(28,25,23,0.06)] dark:shadow-none" style={{ background: "var(--bg-card)" }}>
+                <p className={`text-xs font-semibold uppercase tracking-wide ${stat.color}`}>{stat.label}</p>
+                <p className="mt-2 text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-100">{stat.value}</p>
                 <p className="mt-0.5 text-xs text-stone-400 dark:text-stone-500">{stat.tag}</p>
               </div>
-            ))}
-          </div>
-        )}
+            ))
+          ) : null}
+        </div>
 
         {/* Feature cards */}
         <div>

@@ -19,9 +19,30 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Admit: College counseling, organized",
+  title: "Admit — College counseling, organized",
   description:
-    "Essays, school lists, timelines, and AI guidance in one calm workspace.",
+    "Build your school list, get AI counselor advice, review essays, and track deadlines — all in one calm workspace. Free to start.",
+  openGraph: {
+    title: "Admit — College counseling, organized",
+    description: "Build your school list, get AI counselor advice, and review essays. Free to start.",
+    url: "https://admit-theta.vercel.app",
+    siteName: "Admit",
+    type: "website",
+    images: [
+      {
+        url: "https://admit-theta.vercel.app/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Admit — College counseling, organized",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Admit — College counseling, organized",
+    description: "Build your school list, get AI counselor advice, and review essays. Free to start.",
+    images: ["https://admit-theta.vercel.app/og.png"],
+  },
 };
 
 export default function RootLayout({
