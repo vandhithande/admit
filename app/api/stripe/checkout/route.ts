@@ -51,7 +51,11 @@ export async function POST(request: Request) {
       metadata: { user_id: user.id },
     });
     customerId = customer.id;
-    await supabase.from("profiles").update({ stripe_customer_id: customerId }).eq("user_id", user.id);
+    // Use upsert so it works whether or not a profile row exists yet
+    await supabase.from("profiles").upsert(
+      { user_id: user.id, stripe_customer_id: customerId, updated_at: new Date().toISOString() },
+      { onConflict: "user_id" }
+    );
   }
 
   // Count total signups to determine trial length

@@ -27,7 +27,21 @@ export async function POST() {
     .single();
 
   if (!profile?.stripe_customer_id) {
-    return NextResponse.json({ status: "no_customer" });
+    // Profile row may not exist yet — check Stripe directly by email
+    const customers = await stripe.customers.list({ email: user.email!, limit: 1 });
+    const customer = customers.data[0];
+    if (!customer) return NextResponse.json({ status: "no_customer" });
+
+    // Save it now
+    const admin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+    await admin.from("profiles").upsert(
+      { user_id: user.id, stripe_customer_id: customer.id, updated_at: new Date().toISOString() },
+      { onConflict: "user_id" }
+    );
+    profile = { stripe_customer_id: customer.id };
   }
 
   try {
