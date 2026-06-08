@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AnimatedHero } from "@/components/landing/animated-hero";
 import {
   MessageSquare,
   School,
@@ -80,49 +81,7 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        {/* Hero */}
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-amber-50/40 dark:from-orange-950/30 dark:via-amber-950/10 to-transparent" />
-          <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-orange-100/60 dark:bg-orange-900/20 blur-3xl" />
-          <div className="absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-amber-100/50 dark:bg-amber-900/15 blur-3xl" />
-
-          <div className="relative mx-auto max-w-5xl px-6 pb-24 pt-20 sm:pt-32">
-            <div className="inline-flex items-center gap-2 rounded-full border border-orange-200/80 dark:border-orange-800/60 bg-orange-50 dark:bg-orange-950/50 px-3.5 py-1.5 text-xs font-medium text-orange-700 dark:text-orange-400 shadow-sm mb-6">
-              <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
-              Free forever · Upgrade for AI features
-            </div>
-
-            <h1 className="font-heading max-w-3xl text-5xl font-semibold leading-[1.08] tracking-tight text-stone-900 dark:text-stone-100 sm:text-6xl">
-              Your college journey,{" "}
-              <span className="text-orange-600 dark:text-orange-400">finally organized.</span>
-            </h1>
-
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-600 dark:text-stone-400">
-              One calm workspace for essays, school lists, deadlines, and AI
-              strategy — without the spreadsheet chaos.
-            </p>
-
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-              <Link
-                href="/signup"
-                className="inline-flex items-center justify-center rounded-xl bg-orange-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-orange-700 hover:shadow-lg"
-              >
-                Start for free
-              </Link>
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center rounded-xl border border-stone-300 dark:border-stone-600 px-6 py-3 text-sm font-medium text-stone-800 dark:text-stone-200 shadow-sm transition-colors hover:bg-stone-50 dark:hover:bg-stone-800"
-                style={{ background: "var(--bg-card)" }}
-              >
-                I have an account
-              </Link>
-            </div>
-
-            <p className="mt-6 text-xs text-stone-400 dark:text-stone-500">
-              Trusted by students applying to Harvard, MIT, Stanford, and more.
-            </p>
-          </div>
-        </section>
+        <AnimatedHero />
 
         {/* School logos marquee */}
         <section className="border-t border-stone-200/60 dark:border-stone-700/50 py-10 overflow-hidden">
