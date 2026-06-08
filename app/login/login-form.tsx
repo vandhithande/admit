@@ -13,6 +13,7 @@ export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? "/dashboard";
+  const checkEmail = searchParams.get("notice") === "check-email";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -77,7 +78,12 @@ export function LoginForm() {
           <Link href="/" className="font-heading text-lg font-bold text-stone-900 dark:text-stone-100 lg:hidden">
             admit
           </Link>
-          <h1 className="font-heading mt-8 text-3xl font-semibold tracking-tight text-stone-900 dark:text-stone-100 lg:mt-0">
+          {checkEmail && (
+            <div className="mt-8 lg:mt-0 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/50 px-4 py-3 text-sm text-emerald-800 dark:text-emerald-400">
+              ✓ Check your email for a confirmation link, then log in here.
+            </div>
+          )}
+          <h1 className={`font-heading text-3xl font-semibold tracking-tight text-stone-900 dark:text-stone-100 ${checkEmail ? "mt-4" : "mt-8 lg:mt-0"}`}>
             Welcome back
           </h1>
           <p className="mt-1.5 text-sm text-stone-500 dark:text-stone-400">

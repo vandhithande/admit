@@ -43,7 +43,7 @@ export default function SignupPage() {
       });
       if (signUpError) { setError(signUpError.message); return; }
       if (data.session) { router.push("/onboarding"); router.refresh(); return; }
-      setNotice("Check your email for a confirmation link to finish creating your account.");
+      router.push("/login?notice=check-email");
     } finally {
       setLoading(false);
     }
