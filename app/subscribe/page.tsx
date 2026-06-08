@@ -24,12 +24,12 @@ export default function SubscribePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const monthlyPrice = 9;
-  const yearlyPrice = 72;
-  const displayPrice = billing === "yearly" ? yearlyPrice / 12 : monthlyPrice;
+  const monthlyPrice = 19;
+  const yearlyPrice = 149;
+  const displayPrice = billing === "yearly" ? +(yearlyPrice / 12).toFixed(2) : monthlyPrice;
   const priceId = billing === "yearly"
-    ? process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY ?? "price_1TdCTgL6mUMJ86yrMYcEUx9s"
-    : process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY ?? "price_1TdCTgL6mUMJ86yrISzDmLxh";
+    ? "price_1Tg9F3L6mUMJ86yrdhxj1bsd"
+    : "price_1Tg9F3L6mUMJ86yrURFF5o4b";
 
   async function startCheckout() {
     setLoading(true);
@@ -38,11 +38,7 @@ export default function SubscribePage() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          priceId: billing === "yearly"
-            ? "price_1TdCTgL6mUMJ86yrMYcEUx9s"
-            : "price_1TdCTgL6mUMJ86yrISzDmLxh",
-        }),
+        body: JSON.stringify({ priceId }),
       });
       const data = await res.json();
       if (data.url) { window.location.href = data.url; }
@@ -121,7 +117,7 @@ export default function SubscribePage() {
               <span className="mb-1.5 text-sm text-stone-400">/mo{billing === "yearly" ? "*" : ""}</span>
             </div>
             {billing === "yearly" && (
-              <p className="text-xs text-stone-400">${yearlyPrice}/year — save ${monthlyPrice * 12 - yearlyPrice}</p>
+              <p className="text-xs text-stone-400">${yearlyPrice}/year — save ${monthlyPrice * 12 - yearlyPrice} vs monthly</p>
             )}
             <ul className="mt-4 space-y-2">
               {PRO_PERKS.map((p) => (
