@@ -12,6 +12,7 @@ import {
 export type PickedSchool = {
   name: string;
   location: string;
+  acceptanceRate: number | null;
 };
 
 type Suggestion = {
@@ -168,7 +169,7 @@ export function CollegeScorecardCombobox({
 
   const choose = useCallback(
     (s: Suggestion) => {
-      onPicked({ name: s.name, location: s.location });
+      onPicked({ name: s.name, location: s.location, acceptanceRate: s.acceptanceRate });
       setOpen(false);
       setSuggestions([]);
       setActiveIndex(-1);
