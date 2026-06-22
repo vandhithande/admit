@@ -136,9 +136,20 @@ export default function SubscribePage() {
               className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-orange-600 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-orange-700 disabled:opacity-60">
               {loading ? "Redirecting…" : "Start free trial →"}
             </button>
-            <p className="mt-2 text-center text-[10px] text-stone-400">$0 due today · Cancel anytime</p>
+            <p className="mt-2 text-center text-[10px] text-stone-400">$0 due today · Cancel anytime before trial ends</p>
+            <p className="mt-1 text-center text-[10px] text-stone-400">
+              After your trial, you will be charged{" "}
+              <strong>{billing === "yearly" ? `$149/year` : `$19/month`}</strong>{" "}
+              automatically until you cancel. Cancel anytime in Settings → Manage billing. By subscribing you agree to our{" "}
+              <Link href="/terms" className="underline hover:text-stone-600">Terms</Link> and{" "}
+              <Link href="/privacy" className="underline hover:text-stone-600">Privacy Policy</Link>.
+            </p>
           </div>
         </div>
+
+        <p className="mt-8 text-center text-[11px] text-stone-400 max-w-sm mx-auto">
+          Admit uses AI to provide college planning guidance. AI suggestions are not a guarantee of admission outcomes — always verify deadlines and requirements directly with schools.
+        </p>
       </div>
     </div>
   );

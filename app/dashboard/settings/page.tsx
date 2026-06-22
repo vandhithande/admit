@@ -54,7 +54,11 @@ export default function SettingsPage() {
       if (!u) { setLoading(false); return; }
       setUser(u);
 
-      const { data } = await supabase.from("profiles").select("*").eq("user_id", u.id).single();
+      const { data } = await supabase
+        .from("profiles")
+        .select("name, grade, intended_major, interests, gpa, sat_score, act_score, state, extra_context, subscription_status, trial_ends_at")
+        .eq("user_id", u.id)
+        .single();
       if (cancelled) return;
       if (data) {
         setSubStatus(data.subscription_status ?? null);
@@ -185,11 +189,19 @@ export default function SettingsPage() {
                   </div>
                   <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
                     {subStatus === "trialing" && trialEndsAt
-                      ? `Trial ends ${new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`
+                      ? `Trial ends ${new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })} — cancel before then to avoid being charged.`
                       : subStatus === "active"
-                      ? "$20 / month"
+                      ? "$19/month — renews automatically"
                       : "No active subscription"}
                   </p>
+                  {subStatus === "trialing" && trialEndsAt && (() => {
+                    const daysLeft = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / 86_400_000);
+                    return daysLeft <= 7 ? (
+                      <p className="mt-2 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/50 px-3 py-2 text-xs text-amber-800 dark:text-amber-300">
+                        Your trial ends in {daysLeft} day{daysLeft === 1 ? "" : "s"}. Cancel anytime via &ldquo;Manage billing&rdquo; to avoid charges.
+                      </p>
+                    ) : null;
+                  })()}
                 </div>
                 <button
                   type="button"
@@ -201,6 +213,11 @@ export default function SettingsPage() {
                   {portalLoading ? "Loading…" : "Manage billing →"}
                 </button>
               </div>
+              {(subStatus === "trialing" || subStatus === "active") && (
+                <p className="mt-3 text-xs text-stone-400 dark:text-stone-500">
+                  To cancel, click &ldquo;Manage billing&rdquo; above and select Cancel Subscription. You keep access until the end of your current period.
+                </p>
+              )}
             </div>
           </div>
 

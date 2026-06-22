@@ -371,7 +371,7 @@ export default function CounselorPage() {
             </button>
           </div>
           <p className="mt-2 text-center text-xs text-stone-400 dark:text-stone-500">
-            Press Enter to send, Shift+Enter for a new line.
+            Press Enter to send, Shift+Enter for a new line · AI-generated — verify deadlines and requirements directly with schools.
           </p>
         </div>
       </div>

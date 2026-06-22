@@ -5,6 +5,22 @@ import Groq from "groq-sdk";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
+const rateLimits = new Map<string, { count: number; resetAt: number }>();
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const entry = rateLimits.get(userId);
+  if (!entry || now > entry.resetAt) {
+    rateLimits.set(userId, { count: 1, resetAt: now + 60_000 });
+    return true;
+  }
+  if (entry.count >= 5) return false;
+  entry.count++;
+  return true;
+}
+
+const MAX_ESSAY_CHARS = 12_000;
+const MAX_FIELD_CHARS = 200;
+
 export async function POST(request: Request) {
   const cookieStore = await cookies();
   const supabase = createServerClient(
@@ -21,8 +37,26 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { essay, essayType, schoolName, prompt } = await request.json();
-  if (!essay?.trim()) return NextResponse.json({ error: "No essay provided" }, { status: 400 });
+  if (!checkRateLimit(user.id)) {
+    return NextResponse.json({ error: "Too many requests — wait a minute and try again." }, { status: 429 });
+  }
+
+  let body: Record<string, unknown>;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  const essay = typeof body.essay === "string" ? body.essay.trim() : "";
+  const essayType = typeof body.essayType === "string" ? body.essayType.slice(0, MAX_FIELD_CHARS) : "Common App";
+  const schoolName = typeof body.schoolName === "string" ? body.schoolName.slice(0, MAX_FIELD_CHARS) : "";
+  const prompt = typeof body.prompt === "string" ? body.prompt.slice(0, MAX_FIELD_CHARS) : "";
+
+  if (!essay) return NextResponse.json({ error: "No essay provided" }, { status: 400 });
+  if (essay.length > MAX_ESSAY_CHARS) {
+    return NextResponse.json({ error: "Essay is too long (max 12,000 characters)" }, { status: 400 });
+  }
 
   const { data: profile } = await supabase
     .from("profiles")

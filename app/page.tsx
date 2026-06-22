@@ -228,7 +228,9 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-stone-200/60 dark:border-stone-700/50 py-8 text-center text-xs text-stone-400 dark:text-stone-500">
-        © {new Date().getFullYear()} Admit
+        © {new Date().getFullYear()} Admit ·{" "}
+        <Link href="/privacy" className="hover:underline">Privacy</Link>{" "}·{" "}
+        <Link href="/terms" className="hover:underline">Terms</Link>
       </footer>
     </div>
   );

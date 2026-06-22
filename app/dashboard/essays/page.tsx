@@ -232,6 +232,9 @@ export default function EssaysPage() {
             </div>
           )}
         </div>
+        <p className="mx-auto max-w-3xl pb-6 text-center text-xs text-stone-400 dark:text-stone-500">
+          AI-generated feedback — use as a guide, not a final verdict. Verify any factual claims about programs or deadlines.
+        </p>
       </div>
     </div>
     </ProGate>

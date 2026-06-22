@@ -234,24 +234,35 @@ export async function POST(request: Request) {
     return new Response("Too many requests — wait a minute and try again.", { status: 429 });
   }
 
-  const body = (await request.json()) as {
-    content: string;
-    history: MessageParam[];
-  };
-
-  const { content, history } = body;
-  if (!content?.trim()) {
+  let body: { content?: unknown; history?: unknown };
+  try {
+    body = await request.json();
+  } catch {
     return new Response("Bad Request", { status: 400 });
   }
 
+  const content = typeof body.content === "string" ? body.content.trim().slice(0, 4000) : "";
+  if (!content) return new Response("Bad Request", { status: 400 });
+
+  const rawHistory = Array.isArray(body.history) ? body.history : [];
+  const history = rawHistory
+    .filter((m) => m && typeof m.role === "string" && typeof m.content === "string")
+    .slice(-20)
+    .map((m) => ({ role: m.role as "user" | "assistant", content: (m.content as string).slice(0, 4000) }));
+
   const [schoolResult, activityResult, profileResult] = await Promise.all([
-    supabase.from("schools").select("name, category").eq("user_id", user.id),
+    supabase.from("schools").select("name, category").eq("user_id", user.id).limit(100),
     supabase
       .from("activities")
       .select("name, role, description, category, hours_per_week, weeks_per_year")
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false }),
-    supabase.from("profiles").select("*").eq("user_id", user.id).single(),
+      .order("created_at", { ascending: false })
+      .limit(30),
+    supabase
+      .from("profiles")
+      .select("grade, intended_major, interests, gpa, sat_score, act_score, state, extra_context")
+      .eq("user_id", user.id)
+      .single(),
   ]);
 
   const schools = (schoolResult.data ?? []) as { name: string; category: string }[];
