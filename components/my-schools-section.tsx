@@ -29,12 +29,9 @@ const categoryLabels: Record<SchoolCategory, string> = {
 };
 
 const badgeStyles: Record<SchoolCategory, string> = {
-  reach:
-    "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 ring-1 ring-inset ring-rose-200/80 dark:ring-rose-800/50",
-  target:
-    "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 ring-1 ring-inset ring-amber-200/80 dark:ring-amber-800/50",
-  safety:
-    "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 ring-1 ring-inset ring-emerald-200/80 dark:ring-emerald-800/50",
+  reach:  "border border-rose-200 dark:border-rose-800/60 text-rose-600 dark:text-rose-400",
+  target: "border border-amber-200 dark:border-amber-800/60 text-amber-600 dark:text-amber-400",
+  safety: "border border-emerald-200 dark:border-emerald-800/60 text-emerald-600 dark:text-emerald-400",
 };
 
 function isSchoolCategory(v: string): v is SchoolCategory {
