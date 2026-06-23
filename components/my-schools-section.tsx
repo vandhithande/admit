@@ -30,11 +30,11 @@ const categoryLabels: Record<SchoolCategory, string> = {
 
 const badgeStyles: Record<SchoolCategory, string> = {
   reach:
-    "bg-rose-50 text-rose-800 ring-1 ring-inset ring-rose-200/80",
+    "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 ring-1 ring-inset ring-rose-200/80 dark:ring-rose-800/50",
   target:
-    "bg-amber-50 text-amber-900 ring-1 ring-inset ring-amber-200/80",
+    "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 ring-1 ring-inset ring-amber-200/80 dark:ring-amber-800/50",
   safety:
-    "bg-emerald-50 text-emerald-900 ring-1 ring-inset ring-emerald-200/80",
+    "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 ring-1 ring-inset ring-emerald-200/80 dark:ring-emerald-800/50",
 };
 
 function isSchoolCategory(v: string): v is SchoolCategory {
@@ -270,7 +270,7 @@ export function MySchoolsSection({ useScorecardSearch = false }: Props) {
           </form>
 
           {error ? (
-            <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+            <p className="mt-4 rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-700 dark:text-red-400">
               {error}
             </p>
           ) : null}
@@ -324,7 +324,7 @@ export function MySchoolsSection({ useScorecardSearch = false }: Props) {
                             <button
                               type="button"
                               onClick={() => void removeSchool(school.id)}
-                              className="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-800"
+                              className="rounded-lg border border-stone-200 dark:border-stone-700 px-3 py-1.5 text-xs font-medium text-stone-500 dark:text-stone-400 transition-colors hover:border-red-200 dark:hover:border-red-900 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-600 dark:hover:text-red-400" style={{ background: "var(--bg-base)" }}
                             >
                               Delete
                             </button>
