@@ -12,6 +12,7 @@ import {
   Calendar,
   ChevronRight,
   BarChart2,
+  Sparkles,
 } from "lucide-react";
 
 type SchoolCounts = { reach: number; target: number; safety: number };
@@ -21,45 +22,46 @@ const features = [
     href: "/dashboard/schools",
     icon: School,
     title: "My Schools",
-    description: "Build and organize your college list by reach, target, and safety.",
+    description: "Build your college list. Add reach, target, and safety schools with live acceptance rates.",
     color: "bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400",
     free: true,
   },
   {
-    href: "/dashboard/counselor",
-    icon: MessageSquare,
-    title: "AI Counselor",
-    description: "Get specific program, competition, and course recommendations.",
-    color: "bg-orange-100 text-orange-600 dark:bg-orange-950 dark:text-orange-400",
-  },
-  {
     href: "/dashboard/activities",
     icon: ListChecks,
-    title: "EC Strategy",
-    description: "Track your extracurriculars and build a compelling storyline.",
+    title: "Activities",
+    description: "Log your extracurriculars, roles, and hours. Build a complete picture of your profile.",
     color: "bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400",
-  },
-  {
-    href: "/dashboard/essays",
-    icon: FileText,
-    title: "Essay Review",
-    description: "Draft and refine your Common App and supplemental essays.",
-    color: "bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-400",
+    free: true,
   },
   {
     href: "/dashboard/timeline",
     icon: Calendar,
     title: "Timeline",
-    description: "Stay on top of deadlines and milestones for every school.",
+    description: "Track deadlines and milestones for every school in one view.",
     color: "bg-rose-100 text-rose-600 dark:bg-rose-950 dark:text-rose-400",
     free: true,
     comingSoon: true,
   },
   {
+    href: "/dashboard/counselor",
+    icon: MessageSquare,
+    title: "AI Counselor",
+    description: "Named programs, real deadlines, and personalized strategy — grounded in your profile.",
+    color: "bg-orange-100 text-orange-600 dark:bg-orange-950 dark:text-orange-400",
+  },
+  {
+    href: "/dashboard/essays",
+    icon: FileText,
+    title: "Essay Review",
+    description: "Line-by-line AI feedback on every draft. Score, strengths, and what to fix.",
+    color: "bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-400",
+  },
+  {
     href: "/dashboard/predictor",
     icon: BarChart2,
     title: "Admissions Predictor",
-    description: "See your estimated chances at any school based on your real profile.",
+    description: "Grounded admit odds based on your real stats, not generic calculators.",
     color: "bg-indigo-100 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400",
     comingSoon: true,
   },
@@ -69,9 +71,19 @@ function Skeleton({ className }: { className: string }) {
   return <div className={`animate-pulse rounded-xl bg-stone-200 dark:bg-stone-700/60 ${className}`} />;
 }
 
+function getAiTip(counts: SchoolCounts | null): string {
+  if (!counts) return "Fill in your profile in Settings so your AI counselor can give you personalized program recommendations.";
+  const total = counts.reach + counts.target + counts.safety;
+  if (total === 0) return "Start by adding schools to your list — the AI counselor will analyze your balance and suggest adjustments.";
+  if (counts.safety === 0 && total >= 3) return `You have ${counts.reach} reach school${counts.reach !== 1 ? "s" : ""} but no safeties — that's a risky list. The AI counselor can help you find the right balance.`;
+  if (counts.reach === 0 && total >= 3) return "Your list has no reach schools. Unlock the AI counselor to find ambitious schools that match your profile.";
+  if (counts.reach > counts.target + counts.safety) return "Your list is reach-heavy — statistically risky. The AI counselor can help you build a safer, smarter list.";
+  return "Your school list is taking shape. The AI counselor can suggest programs, competitions, and next steps based on your profile.";
+}
+
 export default function DashboardPage() {
   const supabase = useMemo(() => createClient(), []);
-  const { user, profile: userProfile } = useUser();
+  const { user, profile: userProfile, isPro } = useUser();
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [counts, setCounts] = useState<SchoolCounts | null>(null);
   const [loadingCounts, setLoadingCounts] = useState(true);
@@ -158,6 +170,37 @@ export default function DashboardPage() {
             ))
           ) : null}
         </div>
+
+        {/* AI tip teaser — shown only to free users */}
+        {!isPro && !loadingCounts && (
+          <div className="rounded-2xl border border-orange-200/70 dark:border-orange-900/40 overflow-hidden shadow-[0_1px_3px_rgba(28,25,23,0.06)] dark:shadow-none">
+            <div className="flex items-start gap-4 p-5" style={{ background: "var(--bg-card)" }}>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-950/60">
+                <Sparkles size={16} className="text-orange-600 dark:text-orange-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-xs font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">AI Counselor tip</p>
+                  <span className="rounded-full bg-orange-100 dark:bg-orange-950 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-orange-600 dark:text-orange-400">Pro</span>
+                </div>
+                <p className="text-sm text-stone-700 dark:text-stone-300 leading-snug">
+                  {getAiTip(counts)}
+                </p>
+              </div>
+              <Link
+                href="/subscribe"
+                className="shrink-0 rounded-xl bg-orange-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-orange-700"
+              >
+                Unlock AI →
+              </Link>
+            </div>
+            <div className="border-t border-orange-100 dark:border-orange-900/30 bg-orange-50/60 dark:bg-orange-950/10 px-5 py-2.5">
+              <p className="text-[11px] text-orange-700/70 dark:text-orange-400/60">
+                Pro includes unlimited AI counselor, essay review, and EC strategy — 7-day free trial, cancel anytime.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Feature cards */}
         <div>
