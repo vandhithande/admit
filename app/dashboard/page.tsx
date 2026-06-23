@@ -38,10 +38,9 @@ const features = [
     href: "/dashboard/timeline",
     icon: Calendar,
     title: "Timeline",
-    description: "Track deadlines and milestones for every school in one view.",
+    description: "Key dates for the 2026–27 cycle — EA, RD, financial aid deadlines.",
     color: "bg-rose-100 text-rose-600 dark:bg-rose-950 dark:text-rose-400",
     free: true,
-    comingSoon: true,
   },
   {
     href: "/dashboard/counselor",
