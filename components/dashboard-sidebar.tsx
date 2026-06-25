@@ -11,6 +11,7 @@ import {
   MessageSquare,
   FileText,
   ListChecks,
+  Calendar,
   Settings,
   LogOut,
   X,
@@ -19,9 +20,10 @@ import {
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/schools", label: "My Schools", icon: School, free: true },
+  { href: "/dashboard/activities", label: "Activities", icon: ListChecks, free: true },
+  { href: "/dashboard/timeline", label: "Timeline", icon: Calendar, free: true },
   { href: "/dashboard/counselor", label: "AI Counselor", icon: MessageSquare },
   { href: "/dashboard/essays", label: "Essay Review", icon: FileText },
-  { href: "/dashboard/activities", label: "EC Strategy", icon: ListChecks },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
