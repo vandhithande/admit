@@ -120,7 +120,6 @@ export function MySchoolsSection({ useScorecardSearch = false }: Props) {
 
   const [search, setSearch] = useState("");
   const [newCategory, setNewCategory] = useState<SchoolCategory>("target");
-  const [newAppType, setNewAppType] = useState<AppType>("rd");
   const [picked, setPicked] = useState<PickedSchool | null>(null);
 
   const clearPicked = useCallback(() => setPicked(null), []);
@@ -189,7 +188,7 @@ export function MySchoolsSection({ useScorecardSearch = false }: Props) {
         location,
         notes: "",
         app_status: "not_started",
-        app_type: newAppType,
+        app_type: "rd",
         ...(picked?.acceptanceRate != null ? { acceptance_rate: picked.acceptanceRate } : {}),
       })
       .select("id, user_id, name, category, location, notes, acceptance_rate, deadline, app_status, decision, portal_url, app_type, created_at")
@@ -254,17 +253,6 @@ export function MySchoolsSection({ useScorecardSearch = false }: Props) {
                   <option value="reach">Reach</option>
                   <option value="target">Target</option>
                   <option value="safety">Safety</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-medium uppercase tracking-wide text-stone-500 dark:text-stone-400 mb-1">App type</label>
-                <select
-                  value={newAppType}
-                  onChange={(e) => setNewAppType(e.target.value as AppType)}
-                  className="rounded-xl border border-stone-200 dark:border-stone-700 px-3 py-2 text-sm text-stone-900 dark:text-stone-100 outline-none focus:border-orange-400 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-400/20"
-                  style={{ background: "var(--bg-base)" }}
-                >
-                  {APP_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
               </div>
               <div className="flex items-end">
@@ -381,14 +369,32 @@ function SchoolCard({
             )}
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
-            <select
-              value={school.app_type}
-              onChange={(e) => onPatch({ app_type: e.target.value as AppType })}
-              className={`${selectCls} font-semibold uppercase`}
-              style={{ background: "var(--bg-card)" }}
-            >
-              {APP_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
-            </select>
+            {school.app_type !== "rd" ? (
+              /* EA/ED/REA/SCEA — show as badge, click to clear back to RD */
+              <button
+                type="button"
+                onClick={() => onPatch({ app_type: "rd" })}
+                title="Clear early round (set to RD)"
+                className="rounded-md px-2 py-0.5 text-xs font-bold uppercase bg-orange-100 dark:bg-orange-950/60 text-orange-700 dark:text-orange-400 border border-orange-200 dark:border-orange-800/60 hover:opacity-60 transition-opacity"
+              >
+                {school.app_type} ×
+              </button>
+            ) : (
+              /* RD (default) — show a hover-only selector to set an early round */
+              <select
+                value=""
+                onChange={(e) => { if (e.target.value) onPatch({ app_type: e.target.value as AppType }); }}
+                className="opacity-0 group-hover:opacity-100 transition-opacity rounded-md border border-stone-200 dark:border-stone-700 px-1.5 py-0.5 text-[10px] text-stone-500 dark:text-stone-400 outline-none"
+                style={{ background: "var(--bg-card)" }}
+                title="Set early application type"
+              >
+                <option value="">+ EA/ED</option>
+                <option value="ea">EA</option>
+                <option value="ed">ED</option>
+                <option value="rea">REA</option>
+                <option value="scea">SCEA</option>
+              </select>
+            )}
             <span className={`rounded-md px-2 py-0.5 text-xs font-medium capitalize ${badgeStyles[school.category]}`}>
               {school.category}
             </span>
