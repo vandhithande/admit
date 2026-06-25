@@ -26,15 +26,19 @@ export async function POST() {
     .single();
 
   if (!profile?.stripe_customer_id) {
-    return NextResponse.json({ error: "No billing account" }, { status: 400 });
+    return NextResponse.json({ error: "no_customer" }, { status: 400 });
   }
 
   const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-  const session = await stripe.billingPortal.sessions.create({
-    customer: profile.stripe_customer_id,
-    return_url: `${origin}/dashboard/settings`,
-  });
-
-  return NextResponse.json({ url: session.url });
+  try {
+    const session = await stripe.billingPortal.sessions.create({
+      customer: profile.stripe_customer_id,
+      return_url: `${origin}/dashboard/settings`,
+    });
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    console.error("[portal] session create error:", err);
+    return NextResponse.json({ error: "portal_error" }, { status: 500 });
+  }
 }

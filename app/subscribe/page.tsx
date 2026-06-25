@@ -27,9 +27,6 @@ export default function SubscribePage() {
   const monthlyPrice = 19;
   const yearlyPrice = 149;
   const displayPrice = billing === "yearly" ? +(yearlyPrice / 12).toFixed(2) : monthlyPrice;
-  const priceId = billing === "yearly"
-    ? "price_1Tg9F3L6mUMJ86yrdhxj1bsd"
-    : "price_1Tg9F3L6mUMJ86yrURFF5o4b";
 
   async function startCheckout() {
     setLoading(true);
@@ -38,7 +35,7 @@ export default function SubscribePage() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId }),
+        body: JSON.stringify({ plan: billing }),
       });
       const data = await res.json();
       if (data.url) { window.location.href = data.url; }

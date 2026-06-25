@@ -33,6 +33,7 @@ export default function SettingsPage() {
   const [subStatus, setSubStatus] = useState<string | null>(null);
   const [trialEndsAt, setTrialEndsAt] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [portalError, setPortalError] = useState<string | null>(null);
 
   const [profileName, setProfileName] = useState("");
   const [grade, setGrade] = useState("");
@@ -81,10 +82,23 @@ export default function SettingsPage() {
 
   async function openBillingPortal() {
     setPortalLoading(true);
-    const res = await fetch("/api/stripe/portal", { method: "POST" });
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
-    else setPortalLoading(false);
+    setPortalError(null);
+    try {
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else if (data.error === "no_customer") {
+        // No Stripe customer yet — redirect to subscribe instead
+        window.location.href = "/subscribe";
+      } else {
+        setPortalError("Couldn't open billing portal. Try again or contact support.");
+        setPortalLoading(false);
+      }
+    } catch {
+      setPortalError("Couldn't open billing portal. Try again.");
+      setPortalLoading(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -203,17 +217,29 @@ export default function SettingsPage() {
                     ) : null;
                   })()}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => void openBillingPortal()}
-                  disabled={portalLoading}
-                  className="shrink-0 rounded-xl border border-stone-200 dark:border-stone-700 px-4 py-2 text-sm font-medium text-stone-600 dark:text-stone-300 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 disabled:opacity-50"
-                  style={{ background: "var(--bg-base)" }}
-                >
-                  {portalLoading ? "Loading…" : "Manage billing →"}
-                </button>
+                {subStatus === "trialing" || subStatus === "active" ? (
+                  <button
+                    type="button"
+                    onClick={() => void openBillingPortal()}
+                    disabled={portalLoading}
+                    className="shrink-0 rounded-xl border border-stone-200 dark:border-stone-700 px-4 py-2 text-sm font-medium text-stone-600 dark:text-stone-300 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 disabled:opacity-50"
+                    style={{ background: "var(--bg-base)" }}
+                  >
+                    {portalLoading ? "Loading…" : "Manage billing →"}
+                  </button>
+                ) : (
+                  <a
+                    href="/subscribe"
+                    className="shrink-0 rounded-xl bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-orange-700"
+                  >
+                    Upgrade to Pro →
+                  </a>
+                )}
               </div>
-              {(subStatus === "trialing" || subStatus === "active") && (
+              {portalError && (
+                <p className="mt-3 rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/50 px-3 py-2 text-xs text-red-800 dark:text-red-400">{portalError}</p>
+              )}
+              {(subStatus === "trialing" || subStatus === "active") && !portalError && (
                 <p className="mt-3 text-xs text-stone-400 dark:text-stone-500">
                   To cancel, click &ldquo;Manage billing&rdquo; above and select Cancel Subscription. You keep access until the end of your current period.
                 </p>
